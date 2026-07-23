@@ -2,6 +2,16 @@
 
 const numberFormatter = new Intl.NumberFormat("ja-JP");
 const dateFormatter = new Intl.DateTimeFormat("ja-JP", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+  hour: "2-digit",
+  minute: "2-digit",
+  second: "2-digit",
+  hour12: false,
+  timeZone: "Asia/Tokyo",
+});
+const updatedAtFormatter = new Intl.DateTimeFormat("ja-JP", {
   dateStyle: "medium",
   timeStyle: "medium",
   timeZone: "Asia/Tokyo",
@@ -19,6 +29,11 @@ const PUBLIC_KEYS = new Set([
   "stores",
 ]);
 const STORE_KEYS = new Set(["name", "count"]);
+const STORE_CLASSES = new Map([
+  ["岡山店", "store--okayama"],
+  ["高松店", "store--takamatsu"],
+  ["茨木店", "store--ibaraki"],
+]);
 const CACHE_KEY = "homerun-challenge-latest-v1";
 
 function setText(id, value) {
@@ -26,10 +41,20 @@ function setText(id, value) {
   if (element) element.textContent = String(value);
 }
 
-function formatDate(value) {
-  if (!value) return "--";
+function parseDate(value) {
+  if (!value) return null;
   const date = new Date(value);
-  return Number.isNaN(date.getTime()) ? "--" : dateFormatter.format(date);
+  return Number.isNaN(date.getTime()) ? null : date;
+}
+
+function formatUpdatedAt(value) {
+  const date = parseDate(value);
+  return date ? updatedAtFormatter.format(date) : "--";
+}
+
+function formatDataThrough(value) {
+  const date = parseDate(value);
+  return date ? `データは${dateFormatter.format(date)}までの集計です` : "データ対象日時を取得できません";
 }
 
 function requireNumber(value, name) {
@@ -40,7 +65,7 @@ function requireNumber(value, name) {
 }
 
 function validateData(data) {
-  if (!data || typeof data !== "object" || !Array.isArray(data.stores)) {
+  if (!data || typeof data !== "object" || Array.isArray(data) || !Array.isArray(data.stores)) {
     throw new Error("data is invalid");
   }
   if (Object.keys(data).some((key) => !PUBLIC_KEYS.has(key))) {
@@ -73,35 +98,47 @@ function isUpdateStale(updatedAt) {
   return Date.now() - timestamp >= 36 * 60 * 60 * 1000;
 }
 
+function createStoreCard(store) {
+  const card = document.createElement("article");
+  card.className = `store ${STORE_CLASSES.get(store.name) || ""}`.trim();
+
+  const name = document.createElement("span");
+  name.textContent = store.name;
+
+  const count = document.createElement("strong");
+  const value = document.createElement("b");
+  value.textContent = numberFormatter.format(store.count);
+  const unit = document.createElement("small");
+  unit.textContent = "本";
+  count.append(value, unit);
+  card.append(name, count);
+  return card;
+}
+
 function render(data, forceStale = false) {
-  setText("total", numberFormatter.format(data.total));
+  const formattedTotal = numberFormatter.format(data.total);
+  setText("total", formattedTotal);
+  setText("participating-total", formattedTotal);
   setText("target", numberFormatter.format(data.target));
   setText("remaining", numberFormatter.format(data.remaining));
   setText("achievement-rate", numberFormatter.format(data.achievement_rate));
-  setText("data-through", formatDate(data.data_through));
-  setText("updated-at", formatDate(data.updated_at));
-  setText("progress-target", `目標 ${numberFormatter.format(data.target)} 本`);
+  setText("progress-badge", `${numberFormatter.format(data.achievement_rate)}%`);
+  setText("progress-target", `目標 ${numberFormatter.format(data.target)}本`);
+  setText("data-through-message", formatDataThrough(data.data_through));
+  setText("updated-at", formatUpdatedAt(data.updated_at));
 
-  const progress = document.getElementById("progress");
-  progress.max = Math.max(data.target, 1);
-  progress.value = Math.min(data.total, progress.max);
-  progress.textContent = `${data.achievement_rate}%`;
+  const progressRate = Math.max(0, Math.min(data.achievement_rate, 100));
+  const progressFill = document.getElementById("progress-fill");
+  progressFill.style.width = `${progressRate}%`;
+  const progressTrack = document.getElementById("progress-track");
+  progressTrack.setAttribute("aria-valuenow", String(progressRate));
+  progressTrack.setAttribute("aria-valuetext", `${data.achievement_rate}%`);
 
   const staleWarning = document.getElementById("stale-warning");
   staleWarning.hidden = !(forceStale || data.is_stale || isUpdateStale(data.updated_at));
 
   const stores = document.getElementById("stores");
-  stores.replaceChildren();
-  for (const store of data.stores) {
-    const card = document.createElement("div");
-    card.className = "store";
-    const name = document.createElement("span");
-    name.textContent = store.name;
-    const count = document.createElement("strong");
-    count.textContent = `${numberFormatter.format(store.count)} 本`;
-    card.append(name, count);
-    stores.append(card);
-  }
+  stores.replaceChildren(...data.stores.map(createStoreCard));
 }
 
 function saveCachedData(data) {

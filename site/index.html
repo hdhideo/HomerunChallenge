@@ -3,48 +3,93 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>HomerunChallenge | ホームランチャレンジ</title>
+  <meta name="description" content="ホームランドーム公開対象3店舗のホームラン数を紹介する、ホームラン10,000本チャレンジ公式集計ページです。">
+  <title>ホームラン10,000本チャレンジ | HOMERUN DOME</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=20260723-41">
 </head>
 <body>
-  <main class="dashboard" aria-labelledby="page-title">
-    <header>
-      <p class="eyebrow">HOMERUN CHALLENGE</p>
-      <h1 id="page-title">3店舗合計</h1>
-    </header>
+  <header class="hero" aria-labelledby="page-title">
+    <div class="stadium" aria-hidden="true">
+      <span class="stadium-light stadium-light--left"></span>
+      <span class="stadium-light stadium-light--right"></span>
+      <span class="stadium-stand stadium-stand--left"></span>
+      <span class="stadium-stand stadium-stand--right"></span>
+    </div>
+    <div class="hero-content">
+      <img class="event-logo" src="assets/logo/event-logo-gold.png" alt="ホームラン10,000本チャレンジ 公式HRイベントロゴ" width="513" height="495">
+      <h1 id="page-title"><span>ホームラン</span><span>10,000本チャレンジ</span></h1>
+      <p class="english-title">10,000 HOMERUN CHALLENGE</p>
+      <p class="catchcopy"><span>みんなのホームランで、目標10,000本を目指そう！</span></p>
+    </div>
+  </header>
 
-    <section class="hero" aria-live="polite">
-      <p><strong id="total">--</strong><span>本</span></p>
-    </section>
+  <main>
+    <section class="score-card" aria-labelledby="current-score-title">
+      <h2 id="current-score-title">現在のホームラン数</h2>
+      <p class="current-score"><strong id="total">--</strong><span>本</span></p>
 
-    <p id="load-error" class="message error" role="alert" hidden>現在、最新データを取得できません。しばらくしてから再度ご確認ください。</p>
-    <p id="stale-warning" class="message warning" role="status" hidden>データ更新が遅れています</p>
-
-    <section class="summary" aria-label="目標への進捗">
-      <article><span>全体目標</span><strong><b id="target">--</b> 本</strong></article>
-      <article><span>達成率</span><strong><b id="achievement-rate">--</b> %</strong></article>
-      <article><span>残り</span><strong><b id="remaining">--</b> 本</strong></article>
-    </section>
-
-    <section class="progress-section" aria-label="達成率">
-      <div class="progress-labels">
-        <span>0本</span>
-        <span id="progress-target">目標 -- 本</span>
+      <div class="progress-area">
+        <div id="progress-track" class="progress-track" role="progressbar" aria-label="目標達成率" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+          <div id="progress-fill" class="progress-fill"></div>
+          <span id="progress-badge" class="progress-badge">--%</span>
+        </div>
+        <div class="progress-scale" aria-hidden="true">
+          <span>0本</span>
+          <span id="progress-target">目標 -- 本</span>
+        </div>
       </div>
-      <progress id="progress" value="0" max="100">0%</progress>
+
+      <div class="metrics" aria-label="目標への進捗">
+        <article class="metric">
+          <span>目標</span>
+          <strong><b id="target">--</b><small>本</small></strong>
+        </article>
+        <article class="metric">
+          <span>残り</span>
+          <strong><b id="remaining">--</b><small>本</small></strong>
+        </article>
+        <article class="metric metric--rate">
+          <span>達成率</span>
+          <strong><b id="achievement-rate">--</b><small>%</small></strong>
+        </article>
+      </div>
     </section>
 
-    <section>
-      <h2>店舗別ホームラン数</h2>
+    <div class="status-area" aria-live="polite">
+      <p id="load-error" class="message message--error" role="alert" hidden>現在、最新データを取得できません。しばらくしてから再度ご確認ください。</p>
+      <p id="stale-warning" class="message message--warning" role="status" hidden>データ更新が遅れています</p>
+      <p id="data-through-message" class="data-through">データ対象日時を確認しています</p>
+      <p class="updated-at">最終更新日時：<time id="updated-at">--</time></p>
+    </div>
+
+    <section class="stores-section" aria-labelledby="stores-title">
+      <div class="section-heading">
+        <div>
+          <h2 id="stores-title">参加店舗のホームラン数</h2>
+          <p>公開対象3店舗</p>
+        </div>
+      </div>
       <div id="stores" class="stores"></div>
+      <div class="participating-total" aria-label="公開3店舗の合計">
+        <span>公開3店舗 合計</span>
+        <strong><b id="participating-total">--</b><small>本</small></strong>
+      </div>
     </section>
 
-    <footer>
-      <p>データ対象日時 <time id="data-through">--</time></p>
-      <p>最終更新日時 <time id="updated-at">--</time></p>
-    </footer>
+    <section class="about" aria-labelledby="about-title">
+      <h2 id="about-title"><span aria-hidden="true">●</span>チャレンジについて</h2>
+      <ul>
+        <li>ホームランドームの公開対象3店舗のホームラン数を、目標10,000本としてカウントしています。</li>
+        <li>データは毎日更新されます。</li>
+        <li>個人情報は公開していません。安心してご参加ください。</li>
+      </ul>
+    </section>
   </main>
-  <script src="app.js" defer></script>
+
+  <footer>
+    <p>© HOMERUN DOME</p>
+  </footer>
+  <script src="app.js?v=20260723-41" defer></script>
 </body>
 </html>

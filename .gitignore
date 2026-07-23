@@ -1,5 +1,7 @@
 # Local aggregation engine and all runtime data are never published.
 engine/
+design-input/
+review-output/
 
 # Raw or generated sensitive data.
 **/runtime/
