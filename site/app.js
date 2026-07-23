@@ -1,16 +1,6 @@
 "use strict";
 
 const numberFormatter = new Intl.NumberFormat("ja-JP");
-const dateFormatter = new Intl.DateTimeFormat("ja-JP", {
-  year: "numeric",
-  month: "long",
-  day: "numeric",
-  hour: "2-digit",
-  minute: "2-digit",
-  second: "2-digit",
-  hour12: false,
-  timeZone: "Asia/Tokyo",
-});
 const updatedAtFormatter = new Intl.DateTimeFormat("ja-JP", {
   dateStyle: "medium",
   timeStyle: "medium",
@@ -50,11 +40,6 @@ function parseDate(value) {
 function formatUpdatedAt(value) {
   const date = parseDate(value);
   return date ? updatedAtFormatter.format(date) : "--";
-}
-
-function formatDataThrough(value) {
-  const date = parseDate(value);
-  return date ? `データは${dateFormatter.format(date)}までの集計です` : "データ対象日時を取得できません";
 }
 
 function requireNumber(value, name) {
@@ -124,7 +109,6 @@ function render(data, forceStale = false) {
   setText("achievement-rate", numberFormatter.format(data.achievement_rate));
   setText("progress-badge", `${numberFormatter.format(data.achievement_rate)}%`);
   setText("progress-target", `目標 ${numberFormatter.format(data.target)}本`);
-  setText("data-through-message", formatDataThrough(data.data_through));
   setText("updated-at", formatUpdatedAt(data.updated_at));
 
   const progressRate = Math.max(0, Math.min(data.achievement_rate, 100));
