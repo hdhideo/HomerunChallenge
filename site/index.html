@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HomerunChallenge | ホームランチャレンジ</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="dashboard" aria-labelledby="page-title">
+    <header>
+      <p class="eyebrow">HOMERUN CHALLENGE</p>
+      <h1 id="page-title">3店舗合計</h1>
+    </header>
+
+    <section class="hero" aria-live="polite">
+      <p><strong id="total">--</strong><span>本</span></p>
+    </section>
+
+    <p id="load-error" class="message error" role="alert" hidden>現在、最新データを取得できません。しばらくしてから再度ご確認ください。</p>
+    <p id="stale-warning" class="message warning" role="status" hidden>データ更新が遅れています</p>
+
+    <section class="summary" aria-label="目標への進捗">
+      <article><span>全体目標</span><strong><b id="target">--</b> 本</strong></article>
+      <article><span>達成率</span><strong><b id="achievement-rate">--</b> %</strong></article>
+      <article><span>残り</span><strong><b id="remaining">--</b> 本</strong></article>
+    </section>
+
+    <section class="progress-section" aria-label="達成率">
+      <div class="progress-labels">
+        <span>0本</span>
+        <span id="progress-target">目標 -- 本</span>
+      </div>
+      <progress id="progress" value="0" max="100">0%</progress>
+    </section>
+
+    <section>
+      <h2>店舗別ホームラン数</h2>
+      <div id="stores" class="stores"></div>
+    </section>
+
+    <footer>
+      <p>データ対象日時 <time id="data-through">--</time></p>
+      <p>最終更新日時 <time id="updated-at">--</time></p>
+    </footer>
+  </main>
+  <script src="app.js" defer></script>
+</body>
+</html>

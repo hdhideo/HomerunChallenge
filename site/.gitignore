@@ -1,0 +1,15 @@
+# Source CSV and transient/authentication files must never enter the public repository.
+*.csv
+*.tsv
+*.log
+*.tmp
+*.bak
+*cookie*
+*session*
+*auth*
+.env
+.env.*
+secrets/
+__pycache__/
+.DS_Store
+Thumbs.db

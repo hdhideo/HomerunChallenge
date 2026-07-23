@@ -1,0 +1,29 @@
+# Local aggregation engine and all runtime data are never published.
+engine/
+
+# Raw or generated sensitive data.
+**/runtime/
+**/temp/
+**/secrets/
+**/*.csv
+**/*.tsv
+**/*.log
+**/*.tmp
+**/.env
+**/.env.*
+# Credential data files are excluded without hiding safely reviewed source code.
+**/*credential*.json
+**/*credential*.txt
+**/*credential*.bat
+**/*credential*.ps1
+**/*cookie*
+**/*session*
+**/*storage_state*
+**/browser_state.json
+
+# Development-only files.
+**/__pycache__/
+**/.pytest_cache/
+**/*.pyc
+.vscode/
+.idea/
