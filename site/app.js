@@ -103,7 +103,6 @@ function createStoreCard(store) {
 function render(data, forceStale = false) {
   const formattedTotal = numberFormatter.format(data.total);
   setText("total", formattedTotal);
-  setText("participating-total", formattedTotal);
   setText("target", numberFormatter.format(data.target));
   setText("remaining", numberFormatter.format(data.remaining));
   setText("achievement-rate", numberFormatter.format(data.achievement_rate));
