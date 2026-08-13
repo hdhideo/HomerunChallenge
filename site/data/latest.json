@@ -2,24 +2,24 @@
   "schema_version": 1,
   "event_name": "HomerunChallenge",
   "target": 10000,
-  "total": 757,
-  "remaining": 9243,
-  "achievement_rate": 7.57,
-  "data_through": "2026-08-12T23:59:59+09:00",
-  "updated_at": "2026-08-13T07:00:05+09:00",
+  "total": 776,
+  "remaining": 9224,
+  "achievement_rate": 7.76,
+  "data_through": "2026-08-13T23:59:59+09:00",
+  "updated_at": "2026-08-14T07:00:06+09:00",
   "is_stale": false,
   "stores": [
     {
       "name": "岡山店",
-      "count": 237
+      "count": 243
     },
     {
       "name": "高松店",
-      "count": 247
+      "count": 249
     },
     {
       "name": "茨木店",
-      "count": 273
+      "count": 284
     }
   ]
 }
