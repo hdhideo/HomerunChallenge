@@ -24,6 +24,7 @@ review-output/
 **/browser_state.json
 
 # Development-only files.
+.venv/
 **/__pycache__/
 **/.pytest_cache/
 **/*.pyc
